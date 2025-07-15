@@ -1,0 +1,914 @@
+
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen Elasticidades - Sku</title>
+        <style>
+            body { font-family: 'Arial', sans-serif; margin: 30px; background-color: #f4f4f9; padding-top: 80px; }
+            h1 { color: #2c3e50; text-align: center; font-size: 36px; margin-bottom: 20px; }
+            h2 { color: #2980b9; font-size: 24px; margin-bottom: 10px; }
+            .color-subtitulo { color: #9b59b6; font-size: 20px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+            th, td { padding: 12px; text-align: center; border: 1px solid #ddd; }
+            th { background-color: #3498db; color: white; font-weight: bold; }
+            td { background-color: #ffffff; }
+            tr:nth-child(even) td { background-color: #ecf0f1; }
+            tr:hover td { background-color: #f1c40f; }
+            select, button { padding: 10px; margin: 10px; font-size: 16px; }
+            .ocultar-columnas { display: none; }
+
+            /* ==== Navegación por pestañas ==== */
+            nav {
+              background-color: #3498db;
+              padding: 10px;
+              text-align: center;
+              position: fixed;
+              top: 0;
+              width: 100%;
+              z-index: 999;
+            }
+
+            nav div { display: inline-block; position: relative; }
+
+            nav a {
+              margin: 0 15px;
+              color: white;
+              text-decoration: none;
+              font-weight: bold;
+              padding: 10px;
+              display: inline-block;
+            }
+
+            .submenu {
+              display: none;
+              position: absolute;
+              background-color: #2980b9;
+              min-width: 200px;
+              z-index: 1;
+              text-align: left;
+              border-radius: 6px;
+              box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+              top: 100%;
+              left: 0;
+            }
+
+            .submenu a {
+              color: white;
+              padding: 10px;
+              display: block;
+              text-decoration: none;
+            }
+
+            /* Mostrar submenú principal */
+            nav div:hover .submenu {
+              display: block;
+            }
+
+            /* ===== SUBSUBMENU ===== */
+            .submenu-item {
+              position: relative;
+            }
+
+            .subsubmenu {
+              display: none;
+              position: absolute;
+              top: 0;
+              left: 100%;
+              background-color: #1f618d;
+              min-width: 200px;
+              border-radius: 6px;
+              box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            }
+
+            .submenu-item:hover .subsubmenu {
+              display: block;
+            }
+
+            .subsubmenu a {
+              padding: 10px;
+              color: white;
+            }
+
+            nav a:hover,
+            .submenu a:hover,
+            .subsubmenu a:hover {
+              background-color: #1abc9c;
+              color: white;
+            }
+                
+        </style>
+        <script>
+        var data = {};
+        var isAscending = false;
+        function llenarLineas() {
+            var unidad = document.getElementById("unidadSelect").value;
+            var lineaSelect = document.getElementById("lineaSelect");
+            lineaSelect.innerHTML = '<option value="">Todas</option>';
+            if (unidad !== "") {
+                var lineas = [...new Set(data[unidad] || [])];
+                lineas.forEach(function(linea) {
+                    var option = document.createElement("option");
+                    option.value = linea;
+                    option.text = linea;
+                    lineaSelect.appendChild(option);
+                });
+            } else {
+                var allLineas = [];
+                Object.values(data).forEach(function(lineas) {
+                    allLineas = allLineas.concat(lineas);
+                });
+                allLineas = [...new Set(allLineas)];
+                allLineas.forEach(function(linea) {
+                    var option = document.createElement("option");
+                    option.value = linea;
+                    option.text = linea;
+                    lineaSelect.appendChild(option);
+                });
+            }
+        }
+        function filtrarReporte() {
+            var unidad = document.getElementById("unidadSelect").value;
+            var linea = document.getElementById("lineaSelect").value;
+            var rows = document.querySelectorAll("table tbody tr");
+            rows.forEach(row => {
+                var unidadCell = row.cells[0].textContent;
+                var lineaCell = row.cells[1].textContent;
+                if ((unidad === "" || unidadCell === unidad) && (linea === "" || lineaCell === linea)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+        function ordenarPorUnidades() {
+            var table = document.querySelector("table tbody");
+            var rows = Array.from(table.rows);
+            rows.sort(function(a, b) {
+                var unidadA = parseInt(a.cells[6].textContent);
+                var unidadB = parseInt(b.cells[6].textContent);
+                return isAscending ? unidadA - unidadB : unidadB - unidadA;
+            });
+            rows.forEach(function(row) { table.appendChild(row); });
+            isAscending = !isAscending;
+            document.getElementById("ordenarBtn").textContent = isAscending ? "Ordenar de mayor a menor" : "Ordenar de menor a mayor";
+        }
+        window.onload = function() {
+            data = {'ACCESORIOS': ['ACCESORIO DE VIAJE', 'ACCESORIO DE VIAJE', 'ACCESORIO DE VIAJE', 'BOTELLON', 'BOTELLON', 'BOTELLON', 'BUFANDA CUELLO', 'CANGURO', 'COMPLEMENTO', 'DRY PACK', 'DRY PACK', 'DRY PACK', 'GORRA', 'GORRA', 'GORRA', 'GORRA', 'GORRA', 'GORRO', 'GORRO', 'GORRO', 'SOMBRERO'], 'EQUIPAJE': ['MORRAL', 'MORRAL', 'MORRAL', 'MORRAL'], 'ROPA': ['BUZO', 'CAMISA', 'CAMISA', 'CAMISA', 'CAMISETA', 'CAMISETA', 'CAMISETA', 'CAMISETA', 'CAMISETA', 'CAMISETA', 'CHAQUETA', 'CHAQUETA', 'CHAQUETA', 'CHAQUETA', 'CHAQUETA', 'PANTALON', 'PANTALON', 'PANTALON', 'PANTALON', 'PANTALON', 'PANTALON', 'PANTALON', 'PANTALON', 'PANTALON', 'PANTALON']};
+            llenarLineas();
+            ordenarPorUnidades();
+        }
+        </script>
+        </head>
+        <body>
+        
+        <nav>
+          <div>
+            <a href="#">Primatón TOTTO 2025</a>
+            <div class="submenu">
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_2025_FISICAS.html">E+P, FQ NAL, F T S</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_2025_FIS.html">Resumen</a>
+                </div>
+              </div>
+
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_2025_OUTLET.html">OUTLET</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_2025_OUT.html">Resumen</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <a href="#">Primatón TOTTO 2024</a>
+            <div class="submenu">
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_2024_FISICAS.html">E+P, FQ NAL, F T S</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_2024_FIS.html">Resumen</a>
+                </div>
+              </div>
+
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_2024_OUTLET.html">OUTLET</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_2024_OUT.html">Resumen</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <a href="#">Primatón TOPARA</a>
+            <div class="submenu">
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_TOPARA.html">SIN KEYPAGO</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_TOPARA.html">Resumen</a>
+                </div>
+              </div>
+
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_TOPARA_key.html">KEYPAGO</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_TOPARA_KEY.html">Resumen</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </nav>
+
+        <h1>Resumen Elasticidades por Sku - Primaton TOPARA - SIN KEYPAGO</h1>
+        <h2 class="color-subtitulo" style="text-align:center;">TOPARA</h2>
+        <p style="text-align:center; font-size:16px;">Este reporte presenta la elasticidad de los productos en relación a las unidades vendidas y las ventas netas antes y después de la aplicación del descuento.</p>
+
+
+
+        <div style="text-align:center;">
+            <label for="unidadSelect">Unidad de Negocio:</label>
+            <select id="unidadSelect" onchange="llenarLineas(); filtrarReporte();">
+
+        <option value="ACCESORIOS">ACCESORIOS</option><option value="EQUIPAJE">EQUIPAJE</option><option value="ROPA">ROPA</option> 
+            </select>
+            <label for="lineaSelect">Línea:</label>
+            <select id="lineaSelect" onchange="filtrarReporte()">
+                <option value="">Todas</option>
+            </select>
+            <button id="ordenarBtn" onclick="ordenarPorUnidades()">Ordenar de mayor a menor</button>
+            <table>
+            <thead>
+                <tr>
+                    <th class="ocultar-columnas">Unidad de Negocio</th>
+                    <th class="ocultar-columnas">Línea</th>
+                    <th>Producto</th>
+                    <th>SKU</th>
+                    <th>UNDS. Vendidas Semana Anterior</th>
+                    <th>Venta Semana Anterior (COP)</th>
+                    <th>UNDS. Vendidas Primatón</th>
+                    <th>Venta Primatón (COP)</th>
+                    <th>Elasticidad</th>
+                    <th>Aumento de Descuento</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">ACCESORIO DE VIAJE</td>
+                    <td>LLAVERO CONGUILLIO DOBLE</td>
+                    <td>TPAC590001-00OBVU</td>
+                    <td>1</td>
+                    <td>19.900</td>
+                    <td>1</td>
+                    <td>13.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">ACCESORIO DE VIAJE</td>
+                    <td>LLAVERO CONGUILLIO DOBLE</td>
+                    <td>TPAC590001-00VTBU</td>
+                    <td>1</td>
+                    <td>19.900</td>
+                    <td>1</td>
+                    <td>13.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">ACCESORIO DE VIAJE</td>
+                    <td>ACCESORIO VIAJE CHIRIBIQUETE</td>
+                    <td>TPAC640004-00G17U</td>
+                    <td>1</td>
+                    <td>19.900</td>
+                    <td>5</td>
+                    <td>69.500</td>
+                    <td style="background-color: #00FF00">1.60</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">BOTELLON</td>
+                    <td>BOTELLON IRAZU 1</td>
+                    <td>TPAC630001-00B10U</td>
+                    <td>2</td>
+                    <td>199.800</td>
+                    <td>6</td>
+                    <td>419.400</td>
+                    <td style="background-color: #00FF00">1.82</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">BOTELLON</td>
+                    <td>BOTELLON IRAZU 2</td>
+                    <td>TPAC630002-00N01U</td>
+                    <td>2</td>
+                    <td>259.800</td>
+                    <td>2</td>
+                    <td>179.800</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">BOTELLON</td>
+                    <td>BOTELLON IRAZU 2</td>
+                    <td>TPAC630002-00O25U</td>
+                    <td>1</td>
+                    <td>129.900</td>
+                    <td>3</td>
+                    <td>269.700</td>
+                    <td style="background-color: #00FF00">1.86</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">BUFANDA CUELLO</td>
+                    <td>BUFANDA CUELLO OCETA 2.0</td>
+                    <td>TPAC910003-006DIU</td>
+                    <td>1</td>
+                    <td>49.900</td>
+                    <td>2</td>
+                    <td>83.800</td>
+                    <td style="background-color: #00FF00">1.47</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">CANGURO</td>
+                    <td>CANGURO TIKAL</td>
+                    <td>TPAC500001-00V0MU</td>
+                    <td>1</td>
+                    <td>129.900</td>
+                    <td>1</td>
+                    <td>89.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">COMPLEMENTO</td>
+                    <td>COMPLEMENTO OUTDOOR BOLSA HIDRATANTE CHORRERA 2L EMPAQUE</td>
+                    <td>TPAC690004-00Z4MM</td>
+                    <td>1</td>
+                    <td>69.900</td>
+                    <td>2</td>
+                    <td>97.800</td>
+                    <td style="background-color: #00FF00">2.51</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">DRY PACK</td>
+                    <td>DRY PACK COATEPEQUE 2</td>
+                    <td>TPAC640010-00O25U</td>
+                    <td>1</td>
+                    <td>39.900</td>
+                    <td>3</td>
+                    <td>83.700</td>
+                    <td style="background-color: #00FF00">1.82</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">DRY PACK</td>
+                    <td>DRY PACK COATEPEQUE 3</td>
+                    <td>TPAC640011-00Z1QU</td>
+                    <td>1</td>
+                    <td>49.900</td>
+                    <td>4</td>
+                    <td>139.600</td>
+                    <td style="background-color: #00FF00">1.67</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">DRY PACK</td>
+                    <td>DRY PACK PRO ORINOCO</td>
+                    <td>TPAC640012-00B10U</td>
+                    <td>1</td>
+                    <td>349.900</td>
+                    <td>1</td>
+                    <td>209.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">GORRA</td>
+                    <td>GORRA MAIPO</td>
+                    <td>TPAC600002-00B10M</td>
+                    <td>1</td>
+                    <td>79.900</td>
+                    <td>1</td>
+                    <td>67.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">GORRA</td>
+                    <td>GORRA MAIPO</td>
+                    <td>TPAC600002-00N01M</td>
+                    <td>2</td>
+                    <td>239.700</td>
+                    <td>3</td>
+                    <td>203.700</td>
+                    <td style="background-color: #00FF00">3.33</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">GORRA</td>
+                    <td>GORRA MADIDI</td>
+                    <td>TPAC600003-00V0MM</td>
+                    <td>1</td>
+                    <td>99.900</td>
+                    <td>3</td>
+                    <td>254.700</td>
+                    <td style="background-color: #00FF00">1.29</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">GORRA</td>
+                    <td>GORRA MADIDI</td>
+                    <td>TPAC600003-00Z71M</td>
+                    <td>1</td>
+                    <td>199.800</td>
+                    <td>3</td>
+                    <td>254.700</td>
+                    <td style="background-color: #00FF00">7.28</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">GORRA</td>
+                    <td>GORRA ICA</td>
+                    <td>TPAC600004-00V0MM</td>
+                    <td>2</td>
+                    <td>259.800</td>
+                    <td>1</td>
+                    <td>109.900</td>
+                    <td style="background-color: #Adff2f">0.87</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">GORRO</td>
+                    <td>GORRO SIERRA</td>
+                    <td>TPAC800002-00G14M</td>
+                    <td>1</td>
+                    <td>79.900</td>
+                    <td>1</td>
+                    <td>67.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">GORRO</td>
+                    <td>GORRO SIERRA</td>
+                    <td>TPAC800002-00N01M</td>
+                    <td>1</td>
+                    <td>79.900</td>
+                    <td>2</td>
+                    <td>135.800</td>
+                    <td style="background-color: #00FF00">1.43</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">GORRO</td>
+                    <td>GORRO SIERRA</td>
+                    <td>TPAC800002-00V0MM</td>
+                    <td>1</td>
+                    <td>79.900</td>
+                    <td>1</td>
+                    <td>67.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ACCESORIOS</td>
+                    <td class="ocultar-columnas">SOMBRERO</td>
+                    <td>SOMBRERO NAPO</td>
+                    <td>TPAC800003-00N01M</td>
+                    <td>1</td>
+                    <td>99.900</td>
+                    <td>4</td>
+                    <td>339.600</td>
+                    <td style="background-color: #00FF00">1.25</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">EQUIPAJE</td>
+                    <td class="ocultar-columnas">MORRAL</td>
+                    <td>MORRAL TIKAL 15L</td>
+                    <td>TPEQ040001-00O25S</td>
+                    <td>1</td>
+                    <td>169.900</td>
+                    <td>1</td>
+                    <td>118.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">EQUIPAJE</td>
+                    <td class="ocultar-columnas">MORRAL</td>
+                    <td>MORRAL TIKAL 15L</td>
+                    <td>TPEQ040001-00P93S</td>
+                    <td>1</td>
+                    <td>169.900</td>
+                    <td>1</td>
+                    <td>118.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">EQUIPAJE</td>
+                    <td class="ocultar-columnas">MORRAL</td>
+                    <td>MORRAL TIKAL 30L</td>
+                    <td>TPEQ040003-00N01L</td>
+                    <td>1</td>
+                    <td>599.800</td>
+                    <td>3</td>
+                    <td>629.700</td>
+                    <td style="background-color: #00FF00">40.12</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">EQUIPAJE</td>
+                    <td class="ocultar-columnas">MORRAL</td>
+                    <td>MORRAL TIKAL 30L</td>
+                    <td>TPEQ040003-00V0ML</td>
+                    <td>1</td>
+                    <td>299.900</td>
+                    <td>2</td>
+                    <td>419.800</td>
+                    <td style="background-color: #00FF00">2.50</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">BUZO</td>
+                    <td>BUZO M CAYAMBE</td>
+                    <td>TPRA240006-00B10S</td>
+                    <td>1</td>
+                    <td>299.900</td>
+                    <td>2</td>
+                    <td>509.800</td>
+                    <td style="background-color: #00FF00">1.43</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CAMISA</td>
+                    <td>CAMISA H AMAZONAS</td>
+                    <td>TPRA490001-00B04L</td>
+                    <td>1</td>
+                    <td>279.900</td>
+                    <td>1</td>
+                    <td>237.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CAMISA</td>
+                    <td>CAMISA H AMAZONAS</td>
+                    <td>TPRA490001-00T84L</td>
+                    <td>1</td>
+                    <td>279.900</td>
+                    <td>1</td>
+                    <td>237.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CAMISA</td>
+                    <td>CAMISA H AMAZONAS</td>
+                    <td>TPRA490001-00T84S</td>
+                    <td>1</td>
+                    <td>559.800</td>
+                    <td>1</td>
+                    <td>237.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CAMISETA</td>
+                    <td>CAMISETA M COCHA</td>
+                    <td>TPRA260005-03B04M</td>
+                    <td>1</td>
+                    <td>89.900</td>
+                    <td>1</td>
+                    <td>84.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CAMISETA</td>
+                    <td>CAMISETA M COCHA</td>
+                    <td>TPRA260005-03B04XS</td>
+                    <td>1</td>
+                    <td>89.900</td>
+                    <td>1</td>
+                    <td>84.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CAMISETA</td>
+                    <td>CAMISETA M TAYRONA</td>
+                    <td>TPRA260012-01P3RM</td>
+                    <td>1</td>
+                    <td>449.700</td>
+                    <td>1</td>
+                    <td>126.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CAMISETA</td>
+                    <td>CAMISETA M TAYRONA</td>
+                    <td>TPRA260012-02G04M</td>
+                    <td>1</td>
+                    <td>299.800</td>
+                    <td>1</td>
+                    <td>126.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CAMISETA</td>
+                    <td>CAMISETA H COCORNA</td>
+                    <td>TPRA460002-00G03M</td>
+                    <td>1</td>
+                    <td>259.800</td>
+                    <td>2</td>
+                    <td>139.800</td>
+                    <td style="background-color: #00FF00">2.17</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CAMISETA</td>
+                    <td>CAMISETA H GUAJIRA</td>
+                    <td>TPRA460006-00B04M</td>
+                    <td>2</td>
+                    <td>89.900</td>
+                    <td>1</td>
+                    <td>75.900</td>
+                    <td style="background-color: #00FF00">3.21</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CHAQUETA</td>
+                    <td>CHAQUETA M NEVADO DEL RUIZ</td>
+                    <td>TPRA210003-00V0MS</td>
+                    <td>1</td>
+                    <td>1.299.800</td>
+                    <td>1</td>
+                    <td>454.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CHAQUETA</td>
+                    <td>CHAQUETA M CHINGAZA</td>
+                    <td>TPRA210010-00B10S</td>
+                    <td>1</td>
+                    <td>1.499.800</td>
+                    <td>2</td>
+                    <td>1.273.800</td>
+                    <td style="background-color: #00FF00">6.64</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CHAQUETA</td>
+                    <td>CHAQUETA H NEVADO DEL RUIZ</td>
+                    <td>TPRA410001-00N01L</td>
+                    <td>-1</td>
+                    <td>-649.900</td>
+                    <td>2</td>
+                    <td>909.800</td>
+                    <td style="background-color: #00FF00">1.25</td>
+                    <td>0 a 30%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CHAQUETA</td>
+                    <td>CHAQUETA H CHINGAZA</td>
+                    <td>TPRA410005-00N01M</td>
+                    <td>1</td>
+                    <td>1.499.800</td>
+                    <td>1</td>
+                    <td>636.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">CHAQUETA</td>
+                    <td>CHAQUETA H IGUAZU</td>
+                    <td>TPRA410008-00N01L</td>
+                    <td>1</td>
+                    <td>859.800</td>
+                    <td>1</td>
+                    <td>364.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">PANTALON</td>
+                    <td>PANTALON M PARAMO</td>
+                    <td>TPRA280003-00N01L</td>
+                    <td>1</td>
+                    <td>199.900</td>
+                    <td>1</td>
+                    <td>169.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">PANTALON</td>
+                    <td>PANTALON M CANAIMA</td>
+                    <td>TPRA280008-00N018</td>
+                    <td>1</td>
+                    <td>299.900</td>
+                    <td>1</td>
+                    <td>254.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">PANTALON</td>
+                    <td>PANTALON M CANAIMA</td>
+                    <td>TPRA280008-00T846</td>
+                    <td>1</td>
+                    <td>299.900</td>
+                    <td>1</td>
+                    <td>254.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">PANTALON</td>
+                    <td>PANTALON M CANAIMA</td>
+                    <td>TPRA280008-00T848</td>
+                    <td>2</td>
+                    <td>599.800</td>
+                    <td>1</td>
+                    <td>254.900</td>
+                    <td style="background-color: #Adff2f">0.87</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">PANTALON</td>
+                    <td>PANTALON H TATACOA</td>
+                    <td>TPRA480005-00N0128</td>
+                    <td>1</td>
+                    <td>279.900</td>
+                    <td>1</td>
+                    <td>237.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">PANTALON</td>
+                    <td>PANTALON H TATACOA</td>
+                    <td>TPRA480005-00N0130</td>
+                    <td>1</td>
+                    <td>559.800</td>
+                    <td>2</td>
+                    <td>475.800</td>
+                    <td style="background-color: #00FF00">6.66</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">PANTALON</td>
+                    <td>PANTALON H TATACOA</td>
+                    <td>TPRA480005-00T8430</td>
+                    <td>2</td>
+                    <td>559.800</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="background-color: #87CEEB">1.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">PANTALON</td>
+                    <td>PANTALON H SUESCA</td>
+                    <td>TPRA480007-00N0130</td>
+                    <td>1</td>
+                    <td>599.800</td>
+                    <td>1</td>
+                    <td>254.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">PANTALON</td>
+                    <td>PANTALON H SUESCA</td>
+                    <td>TPRA480007-00T8434</td>
+                    <td>1</td>
+                    <td>299.900</td>
+                    <td>1</td>
+                    <td>254.900</td>
+                    <td style="background-color: #FF6347">0.00</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+                <tr>
+                    <td class="ocultar-columnas">ROPA</td>
+                    <td class="ocultar-columnas">PANTALON</td>
+                    <td>PANTALON H SUESCA</td>
+                    <td>TPRA480007-00V0M32</td>
+                    <td>0</td>
+                    <td>1.199.600</td>
+                    <td>2</td>
+                    <td>509.800</td>
+                    <td style="background-color: #A9a9a9">N/A</td>
+                    <td>0 a 15%</td>
+                </tr>
+            
+            </tbody>
+            </table>
+            </body>
+            </html>
+        

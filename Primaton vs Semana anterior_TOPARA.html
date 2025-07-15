@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Matriz de Elasticidad</title>
+            <style>
+                body { font-family: 'Arial', sans-serif; margin: 30px; background-color: #f4f4f9; }
+                h1 { color: #2c3e50; text-align: center; font-size: 36px; margin-bottom: 20px; }
+                h2 { color: #2980b9; font-size: 24px; margin-bottom: 10px; }
+                .color-subtitulo { color: #9b59b6; font-size: 20px; }
+                .color-TL1 { color: #0D47A1; }
+                .color-Prom { color: #2ecc71; }
+                .color-CV { color: #8e44ad; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+                th, td { padding: 12px; text-align: center; border: 1px solid #ddd; }
+                th { background-color: #3498db; color: white; font-weight: bold; }
+                td { background-color: #ffffff; }
+                tr:nth-child(even) td { background-color: #ecf0f1; }
+                tr:nth-child(odd) td { background-color: #ffffff; }
+                tr:hover td { background-color: #f1c40f; }
+                /* Contenedor para las matrices */
+                .matrix-row { display: flex; justify-content: flex-start; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; }
+                .matrix-container { flex: 1 1 10%; box-sizing: border-box; text-align: center; }
+                /* Aseguramos que solo haya 5 matrices por fila máximo */
+                .matrix-container:nth-child(5n+1) { margin-left: 0; }
+                .matrix-title { text-align: center; margin-bottom: 10px; font-size: 20px; font-weight: bold; }
+                .no-disponible { padding: 20px; background-color: #f39c12; color: white; font-size: 18px; font-weight: bold; text-align: center; }
+                .explanation { background-color: #f44336; color: white; padding: 20px; border-radius: 8px; font-size: 16px; text-align: center; margin-top: 10px; }
+            </style>
+         </head>
+         <body>
+ 
+                 
+        <style>
+          nav {
+            background-color: #3498db;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+          }
+
+          nav div {
+            display: inline-block;
+            position: relative;
+          }
+
+          nav a {
+            margin: 0 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+          }
+
+          .submenu {
+            display: none;
+            position: absolute;
+            background-color: #2980b9;
+            min-width: 200px;
+            z-index: 1;
+            text-align: left;
+            top: 100%;
+            left: 0;
+            border-radius: 6px;
+          }
+
+          .submenu a {
+            color: white;
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+          }
+
+          nav div:hover .submenu {
+            display: block;
+          }
+
+          /* Submenú dentro del submenú */
+          .submenu-item {
+            position: relative;
+          }
+
+          .subsubmenu {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            background-color: #1f618d;
+            min-width: 180px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+          }
+
+          .submenu-item:hover .subsubmenu {
+            display: block;
+          }
+
+          .subsubmenu a {
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+          }
+
+          nav a:hover,
+          .submenu a:hover,
+          .subsubmenu a:hover {
+            background-color: #1abc9c;
+            color: white;
+          }
+        </style>
+
+      </head>
+      <body>
+      
+        <nav>
+          <div>
+            <a href="#">Primatón TOTTO 2025</a>
+            <div class="submenu">
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_2025_FISICAS.html">E+P, FQ NAL, F T S</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_2025_FIS.html">Resumen</a>
+                </div>
+              </div>
+
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_2025_OUTLET.html">OUTLET</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_2025_OUT.html">Resumen</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <a href="#">Primatón TOTTO 2024</a>
+            <div class="submenu">
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_2024_FISICAS.html">E+P, FQ NAL, F T S</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_2024_FIS.html">Resumen</a>
+                </div>
+              </div>
+
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_2024_OUTLET.html">OUTLET</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_2024_OUT.html">Resumen</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <a href="#">Primatón TOPARA</a>
+            <div class="submenu">
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_TOPARA.html">SIN KEYPAGO</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_TOPARA.html">Resumen</a>
+                </div>
+              </div>
+
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_TOPARA_key.html">KEYPAGO</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_TOPARA_KEY.html">Resumen</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </nav> 
+
+        <h1>MATRIZ DE ELASTICIDAD PRIMATÓN - TOPARA 2025</h1>
+        <h2 class="color-subtitulo" style="text-align:center;">ELASTICIDAD POR LÍNEA</h2>
+        <h2 class="color-subtitulo" style="text-align:center;">TOPARA</h2>
+        <p style="text-align:center; font-size:16px; margin-bottom: 20px;">
+            Para la primatón de junio de 2025, se ajustaron los precios de algunos productos TOPARA del 0% aumentando a:
+        </p>
+
+        <table style="margin: 0 auto; width: 50%;">
+            <thead>
+                <tr>
+                    <th>PRIMATÓN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>27, 28 y 29 de Junio</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="margin: 0 auto; width: 50%;">
+            <thead>
+                <tr>
+                    <th>DCTO. Previo a Primatón</th>
+                    <th>DCTO. aplicado Primatón</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0%</td>
+                    <td>15%</td>
+                </tr>
+                <tr>
+                    <td>0%</td>
+                    <td>30%</td>
+                </tr>                                                   
+            </tbody>                                
+        </table>
+
+                                
+        <p style="text-align:center; font-size:16px; margin-top: 20px;">
+            A continuación se presentan las matrices de elasticidad para visualizar el efecto del aumento de los descuentos por línea:
+        </p>
+        <div class='matrix-title'><h2>ROPA PANTALON</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_028d1_row0_col0, #T_028d1_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_028d1_row0_col1 {
+  background-color: #FF6347;
+}
+#T_028d1_row1_col0 {
+  background-color: #Ffa07a;
+}
+</style>
+<table id="T_028d1" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_028d1_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_028d1_level0_col1" class="col_heading level0 col1" >15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_028d1_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_028d1_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_028d1_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_028d1_level0_row1" class="row_heading level0 row1" >15</th>
+      <td id="T_028d1_row1_col0" class="data row1 col0" >0.223</td>
+      <td id="T_028d1_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA CHAQUETA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_2f1fc_row0_col0, #T_2f1fc_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_2f1fc_row0_col1 {
+  background-color: #FF6347;
+}
+#T_2f1fc_row1_col0 {
+  background-color: #Adff2f;
+}
+</style>
+<table id="T_2f1fc" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_2f1fc_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_2f1fc_level0_col1" class="col_heading level0 col1" >15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_2f1fc_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_2f1fc_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_2f1fc_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_2f1fc_level0_row1" class="row_heading level0 row1" >15</th>
+      <td id="T_2f1fc_row1_col0" class="data row1 col0" >0.812</td>
+      <td id="T_2f1fc_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_c2411_row0_col0, #T_c2411_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_c2411_row0_col1 {
+  background-color: #FF6347;
+}
+#T_c2411_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_c2411" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_c2411_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_c2411_level0_col1" class="col_heading level0 col1" >30</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_c2411_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_c2411_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_c2411_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_c2411_level0_row1" class="row_heading level0 row1" >30</th>
+      <td id="T_c2411_row1_col0" class="data row1 col0" >40.055</td>
+      <td id="T_c2411_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>EQUIPAJE MORRAL</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_035c2_row0_col0, #T_035c2_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_035c2_row0_col1 {
+  background-color: #FF6347;
+}
+#T_035c2_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_035c2" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_035c2_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_035c2_level0_col1" class="col_heading level0 col1" >30</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_035c2_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_035c2_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_035c2_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_035c2_level0_row1" class="row_heading level0 row1" >30</th>
+      <td id="T_035c2_row1_col0" class="data row1 col0" >19.448</td>
+      <td id="T_035c2_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA CAMISA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_242cc_row0_col0, #T_242cc_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_242cc_row0_col1, #T_242cc_row1_col0 {
+  background-color: #FF6347;
+}
+</style>
+<table id="T_242cc" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_242cc_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_242cc_level0_col1" class="col_heading level0 col1" >15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_242cc_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_242cc_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_242cc_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_242cc_level0_row1" class="row_heading level0 row1" >15</th>
+      <td id="T_242cc_row1_col0" class="data row1 col0" >0.000</td>
+      <td id="T_242cc_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA CAMISETA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_6add4_row0_col0, #T_6add4_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_6add4_row0_col1 {
+  background-color: #FF6347;
+}
+#T_6add4_row1_col0 {
+  background-color: #Ffa07a;
+}
+</style>
+<table id="T_6add4" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_6add4_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_6add4_level0_col1" class="col_heading level0 col1" >15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_6add4_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_6add4_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_6add4_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_6add4_level0_row1" class="row_heading level0 row1" >15</th>
+      <td id="T_6add4_row1_col0" class="data row1 col0" >0.327</td>
+      <td id="T_6add4_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_1c362_row0_col0, #T_1c362_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_1c362_row0_col1 {
+  background-color: #FF6347;
+}
+#T_1c362_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_1c362" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_1c362_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_1c362_level0_col1" class="col_heading level0 col1" >30</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_1c362_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_1c362_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_1c362_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_1c362_level0_row1" class="row_heading level0 row1" >30</th>
+      <td id="T_1c362_row1_col0" class="data row1 col0" >2.165</td>
+      <td id="T_1c362_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS GORRA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_60183_row0_col0, #T_60183_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_60183_row0_col1 {
+  background-color: #FF6347;
+}
+#T_60183_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_60183" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_60183_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_60183_level0_col1" class="col_heading level0 col1" >15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_60183_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_60183_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_60183_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_60183_level0_row1" class="row_heading level0 row1" >15</th>
+      <td id="T_60183_row1_col0" class="data row1 col0" >42.571</td>
+      <td id="T_60183_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS BOTELLON</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_7da02_row0_col0, #T_7da02_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_7da02_row0_col1 {
+  background-color: #FF6347;
+}
+#T_7da02_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_7da02" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_7da02_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_7da02_level0_col1" class="col_heading level0 col1" >30</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_7da02_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_7da02_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_7da02_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_7da02_level0_row1" class="row_heading level0 row1" >30</th>
+      <td id="T_7da02_row1_col0" class="data row1 col0" >2.532</td>
+      <td id="T_7da02_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA BUZO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_b3133_row0_col0, #T_b3133_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_b3133_row0_col1 {
+  background-color: #FF6347;
+}
+#T_b3133_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_b3133" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_b3133_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_b3133_level0_col1" class="col_heading level0 col1" >15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_b3133_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_b3133_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_b3133_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_b3133_level0_row1" class="row_heading level0 row1" >15</th>
+      <td id="T_b3133_row1_col0" class="data row1 col0" >1.429</td>
+      <td id="T_b3133_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS DRY PACK</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_15a73_row0_col0, #T_15a73_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_15a73_row0_col1 {
+  background-color: #FF6347;
+}
+#T_15a73_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_15a73" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_15a73_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_15a73_level0_col1" class="col_heading level0 col1" >30</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_15a73_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_15a73_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_15a73_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_15a73_level0_row1" class="row_heading level0 row1" >30</th>
+      <td id="T_15a73_row1_col0" class="data row1 col0" >112.744</td>
+      <td id="T_15a73_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS SOMBRERO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_ed953_row0_col0, #T_ed953_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_ed953_row0_col1 {
+  background-color: #FF6347;
+}
+#T_ed953_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_ed953" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_ed953_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_ed953_level0_col1" class="col_heading level0 col1" >15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_ed953_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_ed953_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_ed953_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_ed953_level0_row1" class="row_heading level0 row1" >15</th>
+      <td id="T_ed953_row1_col0" class="data row1 col0" >1.250</td>
+      <td id="T_ed953_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS GORRO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_be6dc_row0_col0, #T_be6dc_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_be6dc_row0_col1 {
+  background-color: #FF6347;
+}
+#T_be6dc_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_be6dc" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_be6dc_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_be6dc_level0_col1" class="col_heading level0 col1" >15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_be6dc_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_be6dc_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_be6dc_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_be6dc_level0_row1" class="row_heading level0 row1" >15</th>
+      <td id="T_be6dc_row1_col0" class="data row1 col0" >2.505</td>
+      <td id="T_be6dc_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS CANGURO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_e322a_row0_col0, #T_e322a_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_e322a_row0_col1, #T_e322a_row1_col0 {
+  background-color: #FF6347;
+}
+</style>
+<table id="T_e322a" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_e322a_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_e322a_level0_col1" class="col_heading level0 col1" >30</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_e322a_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_e322a_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_e322a_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_e322a_level0_row1" class="row_heading level0 row1" >30</th>
+      <td id="T_e322a_row1_col0" class="data row1 col0" >0.000</td>
+      <td id="T_e322a_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS COMPLEMENTO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_44d69_row0_col0, #T_44d69_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_44d69_row0_col1 {
+  background-color: #FF6347;
+}
+#T_44d69_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_44d69" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_44d69_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_44d69_level0_col1" class="col_heading level0 col1" >30</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_44d69_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_44d69_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_44d69_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_44d69_level0_row1" class="row_heading level0 row1" >30</th>
+      <td id="T_44d69_row1_col0" class="data row1 col0" >2.505</td>
+      <td id="T_44d69_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS ACCESORIO DE VIAJE</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_aa373_row0_col0, #T_aa373_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_aa373_row0_col1 {
+  background-color: #FF6347;
+}
+#T_aa373_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_aa373" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_aa373_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_aa373_level0_col1" class="col_heading level0 col1" >30</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_aa373_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_aa373_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_aa373_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_aa373_level0_row1" class="row_heading level0 row1" >30</th>
+      <td id="T_aa373_row1_col0" class="data row1 col0" >2.117</td>
+      <td id="T_aa373_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS BUFANDA CUELLO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_a0306_row0_col0, #T_a0306_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_a0306_row0_col1 {
+  background-color: #FF6347;
+}
+#T_a0306_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_a0306" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_a0306_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_a0306_level0_col1" class="col_heading level0 col1" >15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_a0306_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_a0306_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_a0306_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_a0306_level0_row1" class="row_heading level0 row1" >15</th>
+      <td id="T_a0306_row1_col0" class="data row1 col0" >1.472</td>
+      <td id="T_a0306_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br>

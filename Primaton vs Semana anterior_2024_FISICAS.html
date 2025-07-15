@@ -1,0 +1,4136 @@
+<!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Matriz de Elasticidad</title>
+            <style>
+                body { font-family: 'Arial', sans-serif; margin: 30px; background-color: #f4f4f9; }
+                h1 { color: #2c3e50; text-align: center; font-size: 36px; margin-bottom: 20px; }
+                h2 { color: #2980b9; font-size: 24px; margin-bottom: 10px; }
+                .color-subtitulo { color: #9b59b6; font-size: 20px; }
+                .color-TL1 { color: #0D47A1; }
+                .color-Prom { color: #2ecc71; }
+                .color-CV { color: #8e44ad; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+                th, td { padding: 12px; text-align: center; border: 1px solid #ddd; }
+                th { background-color: #3498db; color: white; font-weight: bold; }
+                td { background-color: #ffffff; }
+                tr:nth-child(even) td { background-color: #ecf0f1; }
+                tr:nth-child(odd) td { background-color: #ffffff; }
+                tr:hover td { background-color: #f1c40f; }
+                /* Contenedor para las matrices */
+                .matrix-row { display: flex; justify-content: flex-start; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; }
+                .matrix-container { flex: 1 1 20%; box-sizing: border-box; text-align: center; }
+                /* Aseguramos que solo haya 5 matrices por fila máximo */
+                .matrix-container:nth-child(5n+1) { margin-left: 0; }
+                .matrix-title { text-align: center; margin-bottom: 10px; font-size: 20px; font-weight: bold; }
+                .no-disponible { padding: 20px; background-color: #f39c12; color: white; font-size: 18px; font-weight: bold; text-align: center; }
+                .explanation { background-color: #f44336; color: white; padding: 20px; border-radius: 8px; font-size: 16px; text-align: center; margin-top: 10px; }
+            </style>
+        </head>
+        <body>
+
+        <style>
+          nav {
+            background-color: #3498db;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+          }
+
+          nav div {
+            display: inline-block;
+            position: relative;
+          }
+
+          nav a {
+            margin: 0 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+          }
+
+          .submenu {
+            display: none;
+            position: absolute;
+            background-color: #2980b9;
+            min-width: 200px;
+            z-index: 1;
+            text-align: left;
+            top: 100%;
+            left: 0;
+            border-radius: 6px;
+          }
+
+          .submenu a {
+            color: white;
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+          }
+
+          nav div:hover .submenu {
+            display: block;
+          }
+
+          /* Submenú dentro del submenú */
+          .submenu-item {
+            position: relative;
+          }
+
+          .subsubmenu {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            background-color: #1f618d;
+            min-width: 180px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+          }
+
+          .submenu-item:hover .subsubmenu {
+            display: block;
+          }
+
+          .subsubmenu a {
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+          }
+
+          nav a:hover,
+          .submenu a:hover,
+          .subsubmenu a:hover {
+            background-color: #1abc9c;
+            color: white;
+          }
+        </style>
+
+      </head>
+      <body>
+      
+        <nav>
+          <div>
+            <a href="#">Primatón TOTTO 2025</a>
+            <div class="submenu">
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_2025_FISICAS.html">E+P, FQ NAL, F T S</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_2025_FIS.html">Resumen</a>
+                </div>
+              </div>
+
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_2025_OUTLET.html">OUTLET</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_2025_OUT.html">Resumen</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <a href="#">Primatón TOTTO 2024</a>
+            <div class="submenu">
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_2024_FISICAS.html">E+P, FQ NAL, F T S</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_2024_FIS.html">Resumen</a>
+                </div>
+              </div>
+
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_2024_OUTLET.html">OUTLET</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_2024_OUT.html">Resumen</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <a href="#">Primatón TOPARA</a>
+            <div class="submenu">
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_TOPARA.html">SIN KEYPAGO</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_TOPARA.html">Resumen</a>
+                </div>
+              </div>
+
+              <div class="submenu-item">
+                <a href="Primaton vs Semana anterior_TOPARA_key.html">KEYPAGO</a>
+                <div class="subsubmenu">
+                  <a href="Resumen_sku_TOPARA_KEY.html">Resumen</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </nav> 
+                
+        <h1>MATRIZ DE ELASTICIDAD PRIMATÓN 2024</h1>
+        <h2 class="color-subtitulo" style="text-align:center;">ELASTICIDAD POR LÍNEA</h2>
+        <h2 class="color-subtitulo" style="text-align:center;">ESTÁNDAR + PREMIUM, FQ NAL, F T S</h2>
+        <p style="text-align:center; font-size:16px; margin-bottom: 20px;">
+            Para la primatón de junio de 2024, se ajustaron los precios de algunos productos que tenian el 0, 20 y 30% de DCTO. de la siguiente forma:
+        </p>
+
+        <table style="margin: 0 auto; width: 50%;">
+            <thead>
+                <tr>
+                    <th>PRIMATÓN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>28, 29 y 30 de Junio</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <table style="margin: 0 auto; width: 50%;">
+            <thead>
+                <tr>
+                    <th>DCTO. Previo a Primatón</th>
+                    <th>DCTO. aplicado Primatón</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0%</td>
+                    <td>20%</td>
+                </tr>
+                <tr>
+                    <td>20%</td>
+                   <td>40%</td>
+                </tr>
+                <tr>
+                    <td>30%</td>
+                     <td rowspan="2">40%</td>
+                </tr>
+            </tbody>
+        </table>
+                                
+        <p style="text-align:center; font-size:16px; margin-top: 20px;">
+            A continuación se presentan las matrices de elasticidad para visualizar el efecto del aumento de los descuentos por línea:
+        </p>
+        <div class='matrix-title'><h2>MALETINES MORRAL</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_3f372_row0_col0, #T_3f372_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_3f372_row0_col1 {
+  background-color: #FF6347;
+}
+#T_3f372_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_3f372" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_3f372_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_3f372_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_3f372_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_3f372_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_3f372_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_3f372_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_3f372_row1_col0" class="data row1 col0" >1.734</td>
+      <td id="T_3f372_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_f11e7_row0_col0, #T_f11e7_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_f11e7_row0_col1 {
+  background-color: #FF6347;
+}
+#T_f11e7_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_f11e7" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_f11e7_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_f11e7_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_f11e7_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_f11e7_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_f11e7_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_f11e7_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_f11e7_row1_col0" class="data row1 col0" >1.647</td>
+      <td id="T_f11e7_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_ce87e_row0_col0, #T_ce87e_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_ce87e_row0_col1 {
+  background-color: #FF6347;
+}
+#T_ce87e_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_ce87e" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_ce87e_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_ce87e_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_ce87e_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_ce87e_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_ce87e_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_ce87e_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_ce87e_row1_col0" class="data row1 col0" >2.937</td>
+      <td id="T_ce87e_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL MALETA DE VIAJE</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_76ebb_row0_col0, #T_76ebb_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_76ebb_row0_col1 {
+  background-color: #FF6347;
+}
+#T_76ebb_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_76ebb" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_76ebb_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_76ebb_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_76ebb_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_76ebb_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_76ebb_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_76ebb_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_76ebb_row1_col0" class="data row1 col0" >1.788</td>
+      <td id="T_76ebb_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_51d07_row0_col0, #T_51d07_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_51d07_row0_col1 {
+  background-color: #FF6347;
+}
+#T_51d07_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_51d07" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_51d07_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_51d07_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_51d07_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_51d07_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_51d07_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_51d07_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_51d07_row1_col0" class="data row1 col0" >5.196</td>
+      <td id="T_51d07_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_eefc3_row0_col0, #T_eefc3_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_eefc3_row0_col1 {
+  background-color: #FF6347;
+}
+#T_eefc3_row1_col0 {
+  background-color: #Ffa07a;
+}
+</style>
+<table id="T_eefc3" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_eefc3_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_eefc3_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_eefc3_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_eefc3_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_eefc3_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_eefc3_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_eefc3_row1_col0" class="data row1 col0" >0.464</td>
+      <td id="T_eefc3_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA CHAQUETA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_531f1_row0_col0, #T_531f1_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_531f1_row0_col1 {
+  background-color: #FF6347;
+}
+#T_531f1_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_531f1" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_531f1_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_531f1_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_531f1_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_531f1_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_531f1_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_531f1_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_531f1_row1_col0" class="data row1 col0" >1.673</td>
+      <td id="T_531f1_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_30ae7_row0_col0, #T_30ae7_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_30ae7_row0_col1 {
+  background-color: #FF6347;
+}
+#T_30ae7_row1_col0 {
+  background-color: #Ffa07a;
+}
+</style>
+<table id="T_30ae7" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_30ae7_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_30ae7_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_30ae7_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_30ae7_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_30ae7_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_30ae7_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_30ae7_row1_col0" class="data row1 col0" >0.625</td>
+      <td id="T_30ae7_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_0c4bd_row0_col0, #T_0c4bd_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_0c4bd_row0_col1, #T_0c4bd_row1_col0 {
+  background-color: #FF6347;
+}
+</style>
+<table id="T_0c4bd" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_0c4bd_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_0c4bd_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_0c4bd_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_0c4bd_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_0c4bd_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_0c4bd_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_0c4bd_row1_col0" class="data row1 col0" >0.000</td>
+      <td id="T_0c4bd_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>MALETINES BOLSO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_d918d_row0_col0, #T_d918d_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_d918d_row0_col1 {
+  background-color: #FF6347;
+}
+#T_d918d_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_d918d" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_d918d_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_d918d_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_d918d_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_d918d_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_d918d_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_d918d_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_d918d_row1_col0" class="data row1 col0" >1.797</td>
+      <td id="T_d918d_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_06750_row0_col0, #T_06750_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_06750_row0_col1 {
+  background-color: #FF6347;
+}
+#T_06750_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_06750" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_06750_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_06750_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_06750_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_06750_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_06750_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_06750_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_06750_row1_col0" class="data row1 col0" >9.080</td>
+      <td id="T_06750_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_3e0d4_row0_col0, #T_3e0d4_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_3e0d4_row0_col1 {
+  background-color: #FF6347;
+}
+#T_3e0d4_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_3e0d4" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_3e0d4_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_3e0d4_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_3e0d4_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_3e0d4_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_3e0d4_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_3e0d4_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_3e0d4_row1_col0" class="data row1 col0" >2.801</td>
+      <td id="T_3e0d4_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS BILLETERA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_5e3d0_row0_col0, #T_5e3d0_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_5e3d0_row0_col1 {
+  background-color: #FF6347;
+}
+#T_5e3d0_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_5e3d0" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_5e3d0_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_5e3d0_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_5e3d0_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_5e3d0_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_5e3d0_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_5e3d0_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_5e3d0_row1_col0" class="data row1 col0" >1.779</td>
+      <td id="T_5e3d0_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_c3e51_row0_col0, #T_c3e51_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_c3e51_row0_col1 {
+  background-color: #FF6347;
+}
+#T_c3e51_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_c3e51" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_c3e51_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_c3e51_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_c3e51_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_c3e51_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_c3e51_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_c3e51_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_c3e51_row1_col0" class="data row1 col0" >2.306</td>
+      <td id="T_c3e51_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_827bf_row0_col0, #T_827bf_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_827bf_row0_col1 {
+  background-color: #FF6347;
+}
+#T_827bf_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_827bf" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_827bf_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_827bf_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_827bf_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_827bf_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_827bf_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_827bf_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_827bf_row1_col0" class="data row1 col0" >1.384</td>
+      <td id="T_827bf_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA BUZO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_a28e2_row0_col0, #T_a28e2_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_a28e2_row0_col1 {
+  background-color: #FF6347;
+}
+#T_a28e2_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_a28e2" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_a28e2_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_a28e2_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_a28e2_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_a28e2_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_a28e2_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_a28e2_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_a28e2_row1_col0" class="data row1 col0" >1.666</td>
+      <td id="T_a28e2_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_1b7f1_row0_col0, #T_1b7f1_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_1b7f1_row0_col1, #T_1b7f1_row1_col0 {
+  background-color: #FF6347;
+}
+</style>
+<table id="T_1b7f1" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_1b7f1_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_1b7f1_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_1b7f1_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_1b7f1_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_1b7f1_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_1b7f1_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_1b7f1_row1_col0" class="data row1 col0" >0.000</td>
+      <td id="T_1b7f1_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS MORRAL</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_bd9b6_row0_col0, #T_bd9b6_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_bd9b6_row0_col1 {
+  background-color: #FF6347;
+}
+#T_bd9b6_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_bd9b6" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_bd9b6_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_bd9b6_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_bd9b6_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_bd9b6_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_bd9b6_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_bd9b6_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_bd9b6_row1_col0" class="data row1 col0" >1.527</td>
+      <td id="T_bd9b6_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_3ce58_row0_col0, #T_3ce58_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_3ce58_row0_col1 {
+  background-color: #FF6347;
+}
+#T_3ce58_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_3ce58" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_3ce58_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_3ce58_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_3ce58_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_3ce58_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_3ce58_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_3ce58_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_3ce58_row1_col0" class="data row1 col0" >5.894</td>
+      <td id="T_3ce58_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_fa678_row0_col0, #T_fa678_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_fa678_row0_col1, #T_fa678_row1_col0 {
+  background-color: #FF6347;
+}
+</style>
+<table id="T_fa678" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_fa678_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_fa678_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_fa678_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_fa678_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_fa678_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_fa678_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_fa678_row1_col0" class="data row1 col0" >0.000</td>
+      <td id="T_fa678_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS GORRA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_e5479_row0_col0, #T_e5479_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_e5479_row0_col1 {
+  background-color: #FF6347;
+}
+#T_e5479_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_e5479" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_e5479_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_e5479_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_e5479_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_e5479_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_e5479_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_e5479_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_e5479_row1_col0" class="data row1 col0" >1.644</td>
+      <td id="T_e5479_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_f78ab_row0_col0, #T_f78ab_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_f78ab_row0_col1 {
+  background-color: #FF6347;
+}
+#T_f78ab_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_f78ab" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_f78ab_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_f78ab_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_f78ab_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_f78ab_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_f78ab_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_f78ab_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_f78ab_row1_col0" class="data row1 col0" >2.854</td>
+      <td id="T_f78ab_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_4fcfb_row0_col0, #T_4fcfb_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_4fcfb_row0_col1 {
+  background-color: #FF6347;
+}
+#T_4fcfb_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_4fcfb" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_4fcfb_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_4fcfb_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_4fcfb_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_4fcfb_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_4fcfb_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_4fcfb_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_4fcfb_row1_col0" class="data row1 col0" >1.379</td>
+      <td id="T_4fcfb_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS CANGURO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_f7537_row0_col0, #T_f7537_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_f7537_row0_col1 {
+  background-color: #FF6347;
+}
+#T_f7537_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_f7537" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_f7537_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_f7537_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_f7537_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_f7537_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_f7537_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_f7537_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_f7537_row1_col0" class="data row1 col0" >1.841</td>
+      <td id="T_f7537_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_db65b_row0_col0, #T_db65b_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_db65b_row0_col1 {
+  background-color: #FF6347;
+}
+#T_db65b_row1_col0 {
+  background-color: #Adff2f;
+}
+</style>
+<table id="T_db65b" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_db65b_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_db65b_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_db65b_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_db65b_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_db65b_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_db65b_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_db65b_row1_col0" class="data row1 col0" >0.951</td>
+      <td id="T_db65b_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_e55a9_row0_col0, #T_e55a9_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_e55a9_row0_col1, #T_e55a9_row1_col0 {
+  background-color: #FF6347;
+}
+</style>
+<table id="T_e55a9" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_e55a9_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_e55a9_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_e55a9_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_e55a9_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_e55a9_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_e55a9_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_e55a9_row1_col0" class="data row1 col0" >0.000</td>
+      <td id="T_e55a9_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA CAMISETA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_c52a3_row0_col0, #T_c52a3_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_c52a3_row0_col1 {
+  background-color: #FF6347;
+}
+#T_c52a3_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_c52a3" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_c52a3_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_c52a3_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_c52a3_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_c52a3_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_c52a3_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_c52a3_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_c52a3_row1_col0" class="data row1 col0" >1.656</td>
+      <td id="T_c52a3_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL TULA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_0c23b_row0_col0, #T_0c23b_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_0c23b_row0_col1 {
+  background-color: #FF6347;
+}
+#T_0c23b_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_0c23b" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_0c23b_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_0c23b_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_0c23b_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_0c23b_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_0c23b_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_0c23b_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_0c23b_row1_col0" class="data row1 col0" >1.902</td>
+      <td id="T_0c23b_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_3b4ec_row0_col0, #T_3b4ec_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_3b4ec_row0_col1 {
+  background-color: #FF6347;
+}
+#T_3b4ec_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_3b4ec" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_3b4ec_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_3b4ec_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_3b4ec_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_3b4ec_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_3b4ec_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_3b4ec_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_3b4ec_row1_col0" class="data row1 col0" >2.249</td>
+      <td id="T_3b4ec_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_adce5_row0_col0, #T_adce5_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_adce5_row0_col1 {
+  background-color: #FF6347;
+}
+#T_adce5_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_adce5" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_adce5_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_adce5_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_adce5_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_adce5_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_adce5_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_adce5_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_adce5_row1_col0" class="data row1 col0" >3.797</td>
+      <td id="T_adce5_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA POLO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_0b130_row0_col0, #T_0b130_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_0b130_row0_col1 {
+  background-color: #FF6347;
+}
+#T_0b130_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_0b130" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_0b130_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_0b130_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_0b130_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_0b130_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_0b130_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_0b130_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_0b130_row1_col0" class="data row1 col0" >1.783</td>
+      <td id="T_0b130_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_558be_row0_col0, #T_558be_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_558be_row0_col1 {
+  background-color: #FF6347;
+}
+#T_558be_row1_col0 {
+  background-color: #Ffa07a;
+}
+</style>
+<table id="T_558be" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_558be_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_558be_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_558be_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_558be_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_558be_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_558be_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_558be_row1_col0" class="data row1 col0" >0.469</td>
+      <td id="T_558be_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS ACCESORIO LLUVIA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_fc887_row0_col0, #T_fc887_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_fc887_row0_col1 {
+  background-color: #FF6347;
+}
+#T_fc887_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_fc887" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_fc887_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_fc887_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_fc887_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_fc887_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_fc887_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_fc887_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_fc887_row1_col0" class="data row1 col0" >1.445</td>
+      <td id="T_fc887_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_368bd_row0_col0, #T_368bd_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_368bd_row0_col1 {
+  background-color: #FF6347;
+}
+#T_368bd_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_368bd" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_368bd_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_368bd_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_368bd_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_368bd_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_368bd_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_368bd_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_368bd_row1_col0" class="data row1 col0" >1.534</td>
+      <td id="T_368bd_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_5a8c7_row0_col0, #T_5a8c7_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_5a8c7_row0_col1, #T_5a8c7_row1_col0 {
+  background-color: #FF6347;
+}
+</style>
+<table id="T_5a8c7" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_5a8c7_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_5a8c7_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_5a8c7_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_5a8c7_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_5a8c7_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_5a8c7_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_5a8c7_row1_col0" class="data row1 col0" >0.000</td>
+      <td id="T_5a8c7_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS RELOJ</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_48193_row0_col0, #T_48193_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_48193_row0_col1 {
+  background-color: #FF6347;
+}
+#T_48193_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_48193" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_48193_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_48193_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_48193_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_48193_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_48193_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_48193_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_48193_row1_col0" class="data row1 col0" >1.521</td>
+      <td id="T_48193_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_32c7d_row0_col0, #T_32c7d_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_32c7d_row0_col1 {
+  background-color: #FF6347;
+}
+#T_32c7d_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_32c7d" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_32c7d_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_32c7d_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_32c7d_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_32c7d_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_32c7d_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_32c7d_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_32c7d_row1_col0" class="data row1 col0" >1.280</td>
+      <td id="T_32c7d_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_90a3f_row0_col0, #T_90a3f_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_90a3f_row0_col1 {
+  background-color: #FF6347;
+}
+#T_90a3f_row1_col0 {
+  background-color: #Ffa07a;
+}
+</style>
+<table id="T_90a3f" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_90a3f_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_90a3f_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_90a3f_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_90a3f_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_90a3f_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_90a3f_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_90a3f_row1_col0" class="data row1 col0" >0.451</td>
+      <td id="T_90a3f_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS LONCHERA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_00df2_row0_col0, #T_00df2_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_00df2_row0_col1 {
+  background-color: #FF6347;
+}
+#T_00df2_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_00df2" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_00df2_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_00df2_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_00df2_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_00df2_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_00df2_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_00df2_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_00df2_row1_col0" class="data row1 col0" >2.071</td>
+      <td id="T_00df2_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_ea3a5_row0_col0, #T_ea3a5_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_ea3a5_row0_col1 {
+  background-color: #FF6347;
+}
+#T_ea3a5_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_ea3a5" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_ea3a5_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_ea3a5_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_ea3a5_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_ea3a5_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_ea3a5_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_ea3a5_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_ea3a5_row1_col0" class="data row1 col0" >1.811</td>
+      <td id="T_ea3a5_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_f7698_row0_col0, #T_f7698_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_f7698_row0_col1, #T_f7698_row1_col0 {
+  background-color: #FF6347;
+}
+</style>
+<table id="T_f7698" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_f7698_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_f7698_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_f7698_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_f7698_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_f7698_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_f7698_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_f7698_row1_col0" class="data row1 col0" >0.000</td>
+      <td id="T_f7698_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS MORRAL RUEDAS</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_06933_row0_col0, #T_06933_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_06933_row0_col1 {
+  background-color: #FF6347;
+}
+#T_06933_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_06933" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_06933_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_06933_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_06933_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_06933_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_06933_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_06933_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_06933_row1_col0" class="data row1 col0" >1.582</td>
+      <td id="T_06933_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_ea2f0_row0_col0, #T_ea2f0_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_ea2f0_row0_col1 {
+  background-color: #FF6347;
+}
+#T_ea2f0_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_ea2f0" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_ea2f0_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_ea2f0_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_ea2f0_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_ea2f0_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_ea2f0_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_ea2f0_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_ea2f0_row1_col0" class="data row1 col0" >1.920</td>
+      <td id="T_ea2f0_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_15fa0_row0_col0, #T_15fa0_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_15fa0_row0_col1 {
+  background-color: #FF6347;
+}
+#T_15fa0_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_15fa0" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_15fa0_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_15fa0_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_15fa0_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_15fa0_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_15fa0_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_15fa0_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_15fa0_row1_col0" class="data row1 col0" >2.001</td>
+      <td id="T_15fa0_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL MORRAL</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_b7b3e_row0_col0, #T_b7b3e_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_b7b3e_row0_col1 {
+  background-color: #FF6347;
+}
+#T_b7b3e_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_b7b3e" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_b7b3e_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_b7b3e_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_b7b3e_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_b7b3e_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_b7b3e_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_b7b3e_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_b7b3e_row1_col0" class="data row1 col0" >3.951</td>
+      <td id="T_b7b3e_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_5e3b6_row0_col0, #T_5e3b6_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_5e3b6_row0_col1 {
+  background-color: #FF6347;
+}
+#T_5e3b6_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_5e3b6" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_5e3b6_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_5e3b6_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_5e3b6_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_5e3b6_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_5e3b6_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_5e3b6_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_5e3b6_row1_col0" class="data row1 col0" >1.655</td>
+      <td id="T_5e3b6_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS BOTELLON</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_2d17a_row0_col0, #T_2d17a_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_2d17a_row0_col1 {
+  background-color: #FF6347;
+}
+#T_2d17a_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_2d17a" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_2d17a_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_2d17a_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_2d17a_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_2d17a_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_2d17a_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_2d17a_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_2d17a_row1_col0" class="data row1 col0" >1.593</td>
+      <td id="T_2d17a_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_73a2d_row0_col0, #T_73a2d_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_73a2d_row0_col1 {
+  background-color: #FF6347;
+}
+#T_73a2d_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_73a2d" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_73a2d_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_73a2d_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_73a2d_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_73a2d_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_73a2d_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_73a2d_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_73a2d_row1_col0" class="data row1 col0" >2.014</td>
+      <td id="T_73a2d_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_8b298_row0_col0, #T_8b298_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_8b298_row0_col1 {
+  background-color: #FF6347;
+}
+#T_8b298_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_8b298" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_8b298_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_8b298_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_8b298_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_8b298_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_8b298_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_8b298_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_8b298_row1_col0" class="data row1 col0" >1.444</td>
+      <td id="T_8b298_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS LONCHERA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_c9887_row0_col0, #T_c9887_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_c9887_row0_col1 {
+  background-color: #FF6347;
+}
+#T_c9887_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_c9887" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_c9887_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_c9887_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_c9887_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_c9887_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_c9887_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_c9887_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_c9887_row1_col0" class="data row1 col0" >1.594</td>
+      <td id="T_c9887_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_163eb_row0_col0, #T_163eb_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_163eb_row0_col1 {
+  background-color: #FF6347;
+}
+#T_163eb_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_163eb" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_163eb_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_163eb_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_163eb_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_163eb_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_163eb_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_163eb_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_163eb_row1_col0" class="data row1 col0" >1.656</td>
+      <td id="T_163eb_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_53234_row0_col0, #T_53234_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_53234_row0_col1 {
+  background-color: #FF6347;
+}
+#T_53234_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_53234" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_53234_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_53234_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_53234_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_53234_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_53234_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_53234_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_53234_row1_col0" class="data row1 col0" >1.413</td>
+      <td id="T_53234_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA PANTALON</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_62ade_row0_col0, #T_62ade_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_62ade_row0_col1 {
+  background-color: #FF6347;
+}
+#T_62ade_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_62ade" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_62ade_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_62ade_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_62ade_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_62ade_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_62ade_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_62ade_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_62ade_row1_col0" class="data row1 col0" >2.222</td>
+      <td id="T_62ade_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS MULTIUSO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_f6689_row0_col0, #T_f6689_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_f6689_row0_col1 {
+  background-color: #FF6347;
+}
+#T_f6689_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_f6689" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_f6689_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_f6689_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_f6689_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_f6689_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_f6689_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_f6689_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_f6689_row1_col0" class="data row1 col0" >1.666</td>
+      <td id="T_f6689_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_f3d97_row0_col0, #T_f3d97_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_f3d97_row0_col1 {
+  background-color: #FF6347;
+}
+#T_f3d97_row1_col0 {
+  background-color: #Adff2f;
+}
+</style>
+<table id="T_f3d97" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_f3d97_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_f3d97_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_f3d97_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_f3d97_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_f3d97_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_f3d97_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_f3d97_row1_col0" class="data row1 col0" >0.926</td>
+      <td id="T_f3d97_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_d11ba_row0_col0, #T_d11ba_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_d11ba_row0_col1 {
+  background-color: #FF6347;
+}
+#T_d11ba_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_d11ba" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_d11ba_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_d11ba_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_d11ba_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_d11ba_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_d11ba_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_d11ba_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_d11ba_row1_col0" class="data row1 col0" >2.944</td>
+      <td id="T_d11ba_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL ALMOHADA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_01843_row0_col0, #T_01843_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_01843_row0_col1 {
+  background-color: #FF6347;
+}
+#T_01843_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_01843" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_01843_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_01843_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_01843_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_01843_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_01843_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_01843_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_01843_row1_col0" class="data row1 col0" >2.245</td>
+      <td id="T_01843_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS GAFAS DE SOL</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_1fe5e_row0_col0, #T_1fe5e_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_1fe5e_row0_col1 {
+  background-color: #FF6347;
+}
+#T_1fe5e_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_1fe5e" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_1fe5e_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_1fe5e_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_1fe5e_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_1fe5e_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_1fe5e_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_1fe5e_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_1fe5e_row1_col0" class="data row1 col0" >1.652</td>
+      <td id="T_1fe5e_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_0caaf_row0_col0, #T_0caaf_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_0caaf_row0_col1 {
+  background-color: #FF6347;
+}
+#T_0caaf_row1_col0 {
+  background-color: #Ffa07a;
+}
+</style>
+<table id="T_0caaf" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_0caaf_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_0caaf_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_0caaf_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_0caaf_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_0caaf_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_0caaf_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_0caaf_row1_col0" class="data row1 col0" >0.698</td>
+      <td id="T_0caaf_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_22725_row0_col0, #T_22725_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_22725_row0_col1 {
+  background-color: #FF6347;
+}
+#T_22725_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_22725" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_22725_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_22725_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_22725_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_22725_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_22725_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_22725_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_22725_row1_col0" class="data row1 col0" >8.577</td>
+      <td id="T_22725_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL PLEGABLE</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_7ec9c_row0_col0, #T_7ec9c_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_7ec9c_row0_col1 {
+  background-color: #FF6347;
+}
+#T_7ec9c_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_7ec9c" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_7ec9c_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_7ec9c_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_7ec9c_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_7ec9c_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_7ec9c_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_7ec9c_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_7ec9c_row1_col0" class="data row1 col0" >1.770</td>
+      <td id="T_7ec9c_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_ca9fa_row0_col0, #T_ca9fa_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_ca9fa_row0_col1 {
+  background-color: #FF6347;
+}
+#T_ca9fa_row1_col0 {
+  background-color: #Ffa07a;
+}
+</style>
+<table id="T_ca9fa" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_ca9fa_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_ca9fa_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_ca9fa_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_ca9fa_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_ca9fa_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_ca9fa_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_ca9fa_row1_col0" class="data row1 col0" >0.226</td>
+      <td id="T_ca9fa_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_0c3f5_row0_col0, #T_0c3f5_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_0c3f5_row0_col1 {
+  background-color: #FF6347;
+}
+#T_0c3f5_row1_col0 {
+  background-color: #Ffa07a;
+}
+</style>
+<table id="T_0c3f5" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_0c3f5_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_0c3f5_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_0c3f5_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_0c3f5_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_0c3f5_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_0c3f5_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_0c3f5_row1_col0" class="data row1 col0" >0.612</td>
+      <td id="T_0c3f5_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS MULTIUSO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_82b3d_row0_col0, #T_82b3d_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_82b3d_row0_col1 {
+  background-color: #FF6347;
+}
+#T_82b3d_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_82b3d" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_82b3d_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_82b3d_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_82b3d_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_82b3d_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_82b3d_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_82b3d_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_82b3d_row1_col0" class="data row1 col0" >1.511</td>
+      <td id="T_82b3d_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_1d814_row0_col0, #T_1d814_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_1d814_row0_col1 {
+  background-color: #FF6347;
+}
+#T_1d814_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_1d814" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_1d814_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_1d814_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_1d814_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_1d814_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_1d814_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_1d814_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_1d814_row1_col0" class="data row1 col0" >9.222</td>
+      <td id="T_1d814_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_44090_row0_col0, #T_44090_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_44090_row0_col1 {
+  background-color: #FF6347;
+}
+#T_44090_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_44090" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_44090_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_44090_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_44090_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_44090_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_44090_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_44090_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_44090_row1_col0" class="data row1 col0" >8.130</td>
+      <td id="T_44090_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL CANGURO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_2f1f9_row0_col0, #T_2f1f9_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_2f1f9_row0_col1 {
+  background-color: #FF6347;
+}
+#T_2f1f9_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_2f1f9" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_2f1f9_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_2f1f9_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_2f1f9_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_2f1f9_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_2f1f9_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_2f1f9_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_2f1f9_row1_col0" class="data row1 col0" >1.762</td>
+      <td id="T_2f1f9_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_c3598_row0_col0, #T_c3598_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_c3598_row0_col1 {
+  background-color: #FF6347;
+}
+#T_c3598_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_c3598" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_c3598_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_c3598_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_c3598_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_c3598_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_c3598_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_c3598_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_c3598_row1_col0" class="data row1 col0" >1.243</td>
+      <td id="T_c3598_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_e1bc0_row0_col0, #T_e1bc0_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_e1bc0_row0_col1 {
+  background-color: #FF6347;
+}
+#T_e1bc0_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_e1bc0" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_e1bc0_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_e1bc0_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_e1bc0_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_e1bc0_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_e1bc0_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_e1bc0_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_e1bc0_row1_col0" class="data row1 col0" >2.005</td>
+      <td id="T_e1bc0_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS LLAVERO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_0ca95_row0_col0, #T_0ca95_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_0ca95_row0_col1 {
+  background-color: #FF6347;
+}
+#T_0ca95_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_0ca95" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_0ca95_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_0ca95_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_0ca95_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_0ca95_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_0ca95_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_0ca95_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_0ca95_row1_col0" class="data row1 col0" >1.442</td>
+      <td id="T_0ca95_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_6a791_row0_col0, #T_6a791_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_6a791_row0_col1 {
+  background-color: #FF6347;
+}
+#T_6a791_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_6a791" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_6a791_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_6a791_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_6a791_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_6a791_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_6a791_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_6a791_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_6a791_row1_col0" class="data row1 col0" >1.510</td>
+      <td id="T_6a791_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_2a725_row0_col0, #T_2a725_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_2a725_row0_col1 {
+  background-color: #FF6347;
+}
+#T_2a725_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_2a725" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_2a725_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_2a725_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_2a725_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_2a725_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_2a725_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_2a725_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_2a725_row1_col0" class="data row1 col0" >1.404</td>
+      <td id="T_2a725_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS CHAQUETA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_bdc29_row0_col0, #T_bdc29_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_bdc29_row0_col1 {
+  background-color: #FF6347;
+}
+#T_bdc29_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_bdc29" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_bdc29_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_bdc29_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_bdc29_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_bdc29_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_bdc29_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_bdc29_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_bdc29_row1_col0" class="data row1 col0" >1.808</td>
+      <td id="T_bdc29_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_7f44e_row0_col0, #T_7f44e_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_7f44e_row0_col1 {
+  background-color: #FF6347;
+}
+#T_7f44e_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_7f44e" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_7f44e_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_7f44e_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_7f44e_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_7f44e_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_7f44e_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_7f44e_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_7f44e_row1_col0" class="data row1 col0" >1.751</td>
+      <td id="T_7f44e_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL MORRAL RUEDAS</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_3901b_row0_col0, #T_3901b_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_3901b_row0_col1 {
+  background-color: #FF6347;
+}
+#T_3901b_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_3901b" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_3901b_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_3901b_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_3901b_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_3901b_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_3901b_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_3901b_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_3901b_row1_col0" class="data row1 col0" >2.084</td>
+      <td id="T_3901b_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL ORGANIZADOR DE BAÑO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_8a5c0_row0_col0, #T_8a5c0_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_8a5c0_row0_col1 {
+  background-color: #FF6347;
+}
+#T_8a5c0_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_8a5c0" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_8a5c0_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_8a5c0_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_8a5c0_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_8a5c0_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_8a5c0_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_8a5c0_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_8a5c0_row1_col0" class="data row1 col0" >2.251</td>
+      <td id="T_8a5c0_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_37aae_row0_col0, #T_37aae_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_37aae_row0_col1 {
+  background-color: #FF6347;
+}
+#T_37aae_row1_col0 {
+  background-color: #Adff2f;
+}
+</style>
+<table id="T_37aae" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_37aae_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_37aae_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_37aae_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_37aae_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_37aae_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_37aae_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_37aae_row1_col0" class="data row1 col0" >0.875</td>
+      <td id="T_37aae_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS CARGADORES</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_4b585_row0_col0, #T_4b585_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_4b585_row0_col1 {
+  background-color: #FF6347;
+}
+#T_4b585_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_4b585" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_4b585_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_4b585_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_4b585_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_4b585_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_4b585_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_4b585_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_4b585_row1_col0" class="data row1 col0" >1.646</td>
+      <td id="T_4b585_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_26f51_row0_col0, #T_26f51_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_26f51_row0_col1 {
+  background-color: #FF6347;
+}
+#T_26f51_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_26f51" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_26f51_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_26f51_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_26f51_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_26f51_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_26f51_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_26f51_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_26f51_row1_col0" class="data row1 col0" >1.601</td>
+      <td id="T_26f51_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL COMPLEMENTO MALETA DE VIAJE</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_4e7b8_row0_col0, #T_4e7b8_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_4e7b8_row0_col1 {
+  background-color: #FF6347;
+}
+#T_4e7b8_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_4e7b8" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_4e7b8_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_4e7b8_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_4e7b8_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_4e7b8_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_4e7b8_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_4e7b8_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_4e7b8_row1_col0" class="data row1 col0" >2.316</td>
+      <td id="T_4e7b8_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS CAMISETA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_8285d_row0_col0, #T_8285d_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_8285d_row0_col1 {
+  background-color: #FF6347;
+}
+#T_8285d_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_8285d" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_8285d_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_8285d_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_8285d_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_8285d_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_8285d_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_8285d_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_8285d_row1_col0" class="data row1 col0" >1.742</td>
+      <td id="T_8285d_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA BERMUDA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_dcc60_row0_col0, #T_dcc60_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_dcc60_row0_col1 {
+  background-color: #FF6347;
+}
+#T_dcc60_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_dcc60" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_dcc60_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_dcc60_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_dcc60_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_dcc60_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_dcc60_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_dcc60_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_dcc60_row1_col0" class="data row1 col0" >1.728</td>
+      <td id="T_dcc60_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL CANDADO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_803ad_row0_col0, #T_803ad_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_803ad_row0_col1 {
+  background-color: #FF6347;
+}
+#T_803ad_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_803ad" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_803ad_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_803ad_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_803ad_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_803ad_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_803ad_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_803ad_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_803ad_row1_col0" class="data row1 col0" >2.769</td>
+      <td id="T_803ad_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL PORTAPASAPORTE</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_9bd47_row0_col0, #T_9bd47_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_9bd47_row0_col1 {
+  background-color: #FF6347;
+}
+#T_9bd47_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_9bd47" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_9bd47_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_9bd47_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_9bd47_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_9bd47_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_9bd47_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_9bd47_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_9bd47_row1_col0" class="data row1 col0" >2.104</td>
+      <td id="T_9bd47_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS BOTELLON</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_7db54_row0_col0, #T_7db54_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_7db54_row0_col1 {
+  background-color: #FF6347;
+}
+#T_7db54_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_7db54" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_7db54_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_7db54_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_7db54_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_7db54_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_7db54_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_7db54_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_7db54_row1_col0" class="data row1 col0" >1.604</td>
+      <td id="T_7db54_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_6e2e2_row0_col0, #T_6e2e2_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_6e2e2_row0_col1 {
+  background-color: #FF6347;
+}
+#T_6e2e2_row1_col0 {
+  background-color: #Ffa07a;
+}
+</style>
+<table id="T_6e2e2" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_6e2e2_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_6e2e2_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_6e2e2_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_6e2e2_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_6e2e2_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_6e2e2_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_6e2e2_row1_col0" class="data row1 col0" >0.777</td>
+      <td id="T_6e2e2_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_a5ac5_row0_col0, #T_a5ac5_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_a5ac5_row0_col1 {
+  background-color: #FF6347;
+}
+#T_a5ac5_row1_col0 {
+  background-color: #Ffa07a;
+}
+</style>
+<table id="T_a5ac5" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_a5ac5_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_a5ac5_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_a5ac5_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_a5ac5_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_a5ac5_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_a5ac5_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_a5ac5_row1_col0" class="data row1 col0" >0.800</td>
+      <td id="T_a5ac5_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS GORRA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_8ac8c_row0_col0, #T_8ac8c_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_8ac8c_row0_col1 {
+  background-color: #FF6347;
+}
+#T_8ac8c_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_8ac8c" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_8ac8c_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_8ac8c_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_8ac8c_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_8ac8c_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_8ac8c_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_8ac8c_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_8ac8c_row1_col0" class="data row1 col0" >1.690</td>
+      <td id="T_8ac8c_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_9e800_row0_col0, #T_9e800_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_9e800_row0_col1 {
+  background-color: #FF6347;
+}
+#T_9e800_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_9e800" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_9e800_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_9e800_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_9e800_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_9e800_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_9e800_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_9e800_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_9e800_row1_col0" class="data row1 col0" >1.273</td>
+      <td id="T_9e800_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS PECHERA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_229e6_row0_col0, #T_229e6_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_229e6_row0_col1 {
+  background-color: #FF6347;
+}
+#T_229e6_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_229e6" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_229e6_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_229e6_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_229e6_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_229e6_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_229e6_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_229e6_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_229e6_row1_col0" class="data row1 col0" >7.145</td>
+      <td id="T_229e6_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL ORGANIZADOR DE EMPAQUE</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_faf7d_row0_col0, #T_faf7d_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_faf7d_row0_col1 {
+  background-color: #FF6347;
+}
+#T_faf7d_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_faf7d" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_faf7d_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_faf7d_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_faf7d_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_faf7d_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_faf7d_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_faf7d_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_faf7d_row1_col0" class="data row1 col0" >2.098</td>
+      <td id="T_faf7d_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_9bfb2_row0_col0, #T_9bfb2_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_9bfb2_row0_col1 {
+  background-color: #FF6347;
+}
+#T_9bfb2_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_9bfb2" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_9bfb2_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_9bfb2_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_9bfb2_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_9bfb2_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_9bfb2_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_9bfb2_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_9bfb2_row1_col0" class="data row1 col0" >1.759</td>
+      <td id="T_9bfb2_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA TOP</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_248dd_row0_col0, #T_248dd_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_248dd_row0_col1 {
+  background-color: #FF6347;
+}
+#T_248dd_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_248dd" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_248dd_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_248dd_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_248dd_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_248dd_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_248dd_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_248dd_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_248dd_row1_col0" class="data row1 col0" >1.827</td>
+      <td id="T_248dd_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS CANGURO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_97b9e_row0_col0, #T_97b9e_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_97b9e_row0_col1 {
+  background-color: #FF6347;
+}
+#T_97b9e_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_97b9e" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_97b9e_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_97b9e_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_97b9e_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_97b9e_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_97b9e_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_97b9e_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_97b9e_row1_col0" class="data row1 col0" >1.511</td>
+      <td id="T_97b9e_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_5e187_row0_col0, #T_5e187_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_5e187_row0_col1 {
+  background-color: #FF6347;
+}
+#T_5e187_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_5e187" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_5e187_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_5e187_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_5e187_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_5e187_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_5e187_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_5e187_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_5e187_row1_col0" class="data row1 col0" >8.458</td>
+      <td id="T_5e187_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_00632_row0_col0, #T_00632_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_00632_row0_col1 {
+  background-color: #FF6347;
+}
+#T_00632_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_00632" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_00632_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_00632_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_00632_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_00632_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_00632_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_00632_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_00632_row1_col0" class="data row1 col0" >1.365</td>
+      <td id="T_00632_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL ACCESORIO DE VIAJE</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_e5f83_row0_col0, #T_e5f83_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_e5f83_row0_col1 {
+  background-color: #FF6347;
+}
+#T_e5f83_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_e5f83" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_e5f83_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_e5f83_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_e5f83_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_e5f83_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_e5f83_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_e5f83_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_e5f83_row1_col0" class="data row1 col0" >28.180</td>
+      <td id="T_e5f83_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS CORREA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_466af_row0_col0, #T_466af_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_466af_row0_col1 {
+  background-color: #FF6347;
+}
+#T_466af_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_466af" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_466af_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_466af_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_466af_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_466af_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_466af_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_466af_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_466af_row1_col0" class="data row1 col0" >1.846</td>
+      <td id="T_466af_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS PROTECTORES</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_fa878_row0_col0, #T_fa878_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_fa878_row0_col1 {
+  background-color: #FF6347;
+}
+#T_fa878_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_fa878" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_fa878_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_fa878_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_fa878_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_fa878_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_fa878_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_fa878_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_fa878_row1_col0" class="data row1 col0" >6.325</td>
+      <td id="T_fa878_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS BUZO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_e6366_row0_col0, #T_e6366_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_e6366_row0_col1 {
+  background-color: #FF6347;
+}
+#T_e6366_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_e6366" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_e6366_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_e6366_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_e6366_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_e6366_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_e6366_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_e6366_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_e6366_row1_col0" class="data row1 col0" >5.299</td>
+      <td id="T_e6366_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_ba804_row0_col0, #T_ba804_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_ba804_row0_col1, #T_ba804_row1_col0 {
+  background-color: #FF6347;
+}
+</style>
+<table id="T_ba804" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_ba804_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_ba804_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_ba804_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_ba804_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_ba804_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_ba804_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_ba804_row1_col0" class="data row1 col0" >0.000</td>
+      <td id="T_ba804_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA PANTALONETA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_68614_row0_col0, #T_68614_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_68614_row0_col1 {
+  background-color: #FF6347;
+}
+#T_68614_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_68614" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_68614_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_68614_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_68614_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_68614_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_68614_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_68614_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_68614_row1_col0" class="data row1 col0" >5.163</td>
+      <td id="T_68614_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_4ef52_row0_col0, #T_4ef52_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_4ef52_row0_col1 {
+  background-color: #FF6347;
+}
+#T_4ef52_row1_col0 {
+  background-color: #Ffa07a;
+}
+</style>
+<table id="T_4ef52" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_4ef52_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_4ef52_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_4ef52_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_4ef52_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_4ef52_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_4ef52_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_4ef52_row1_col0" class="data row1 col0" >0.800</td>
+      <td id="T_4ef52_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS PAÑUELO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_8595d_row0_col0, #T_8595d_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_8595d_row0_col1 {
+  background-color: #FF6347;
+}
+#T_8595d_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_8595d" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_8595d_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_8595d_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_8595d_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_8595d_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_8595d_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_8595d_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_8595d_row1_col0" class="data row1 col0" >1.662</td>
+      <td id="T_8595d_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA CAMISA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_c2afc_row0_col0, #T_c2afc_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_c2afc_row0_col1 {
+  background-color: #FF6347;
+}
+#T_c2afc_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_c2afc" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_c2afc_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_c2afc_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_c2afc_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_c2afc_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_c2afc_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_c2afc_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_c2afc_row1_col0" class="data row1 col0" >2.347</td>
+      <td id="T_c2afc_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS COLLAR</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_14191_row0_col0, #T_14191_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_14191_row0_col1 {
+  background-color: #FF6347;
+}
+#T_14191_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_14191" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_14191_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_14191_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_14191_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_14191_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_14191_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_14191_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_14191_row1_col0" class="data row1 col0" >2.549</td>
+      <td id="T_14191_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS LLAVERO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_8a597_row0_col0, #T_8a597_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_8a597_row0_col1 {
+  background-color: #FF6347;
+}
+#T_8a597_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_8a597" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_8a597_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_8a597_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_8a597_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_8a597_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_8a597_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_8a597_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_8a597_row1_col0" class="data row1 col0" >1.457</td>
+      <td id="T_8a597_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ACCESORIOS PORTAPC</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_6ce62_row0_col0, #T_6ce62_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_6ce62_row0_col1 {
+  background-color: #FF6347;
+}
+#T_6ce62_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_6ce62" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_6ce62_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_6ce62_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_6ce62_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_6ce62_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_6ce62_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_6ce62_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_6ce62_row1_col0" class="data row1 col0" >1.741</td>
+      <td id="T_6ce62_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_b5df2_row0_col0, #T_b5df2_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_b5df2_row0_col1 {
+  background-color: #FF6347;
+}
+#T_b5df2_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_b5df2" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_b5df2_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_b5df2_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_b5df2_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_b5df2_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_b5df2_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_b5df2_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_b5df2_row1_col0" class="data row1 col0" >1.717</td>
+      <td id="T_b5df2_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS JUGUETES</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_2a847_row0_col0, #T_2a847_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_2a847_row0_col1 {
+  background-color: #FF6347;
+}
+#T_2a847_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_2a847" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_2a847_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_2a847_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_2a847_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_2a847_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_2a847_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_2a847_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_2a847_row1_col0" class="data row1 col0" >7.069</td>
+      <td id="T_2a847_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class='matrix-container'><style type="text/css">
+#T_ed2be_row0_col0, #T_ed2be_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_ed2be_row0_col1 {
+  background-color: #FF6347;
+}
+#T_ed2be_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_ed2be" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_ed2be_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_ed2be_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_ed2be_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_ed2be_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_ed2be_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_ed2be_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_ed2be_row1_col0" class="data row1 col0" >2.587</td>
+      <td id="T_ed2be_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS CAPA LLUVIA</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_5ad15_row0_col0, #T_5ad15_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_5ad15_row0_col1 {
+  background-color: #FF6347;
+}
+#T_5ad15_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_5ad15" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_5ad15_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_5ad15_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_5ad15_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_5ad15_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_5ad15_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_5ad15_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_5ad15_row1_col0" class="data row1 col0" >118.039</td>
+      <td id="T_5ad15_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS CAMAS</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_fbe37_row0_col0, #T_fbe37_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_fbe37_row0_col1 {
+  background-color: #FF6347;
+}
+#T_fbe37_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_fbe37" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_fbe37_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_fbe37_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_fbe37_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_fbe37_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_fbe37_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_fbe37_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_fbe37_row1_col0" class="data row1 col0" >35.083</td>
+      <td id="T_fbe37_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS MINI MORRAL</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_852f1_row0_col0, #T_852f1_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_852f1_row0_col1 {
+  background-color: #FF6347;
+}
+#T_852f1_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_852f1" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_852f1_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_852f1_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_852f1_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_852f1_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_852f1_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_852f1_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_852f1_row1_col0" class="data row1 col0" >1.522</td>
+      <td id="T_852f1_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS CASAS</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_5085c_row0_col0, #T_5085c_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_5085c_row0_col1 {
+  background-color: #FF6347;
+}
+#T_5085c_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_5085c" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_5085c_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_5085c_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_5085c_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_5085c_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_5085c_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_5085c_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_5085c_row1_col0" class="data row1 col0" >1.429</td>
+      <td id="T_5085c_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS ARNES</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_9a5d5_row0_col0, #T_9a5d5_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_9a5d5_row0_col1 {
+  background-color: #FF6347;
+}
+#T_9a5d5_row1_col0 {
+  background-color: #Adff2f;
+}
+</style>
+<table id="T_9a5d5" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_9a5d5_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_9a5d5_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_9a5d5_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_9a5d5_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_9a5d5_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_9a5d5_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_9a5d5_row1_col0" class="data row1 col0" >0.910</td>
+      <td id="T_9a5d5_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>ROPA CHALECO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_8fb6d_row0_col0, #T_8fb6d_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_8fb6d_row0_col1 {
+  background-color: #FF6347;
+}
+#T_8fb6d_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_8fb6d" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_8fb6d_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_8fb6d_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_8fb6d_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_8fb6d_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_8fb6d_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_8fb6d_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_8fb6d_row1_col0" class="data row1 col0" >4.983</td>
+      <td id="T_8fb6d_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS BOLSO</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_f6450_row0_col0, #T_f6450_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_f6450_row0_col1 {
+  background-color: #FF6347;
+}
+#T_f6450_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_f6450" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_f6450_level0_col0" class="col_heading level0 col0" >30</th>
+      <th id="T_f6450_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_f6450_level0_row0" class="row_heading level0 row0" >30</th>
+      <td id="T_f6450_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_f6450_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_f6450_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_f6450_row1_col0" class="data row1 col0" >2.498</td>
+      <td id="T_f6450_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>TRAVEL ACCESORIO VIAJE</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_1f7a5_row0_col0, #T_1f7a5_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_1f7a5_row0_col1 {
+  background-color: #FF6347;
+}
+#T_1f7a5_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_1f7a5" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_1f7a5_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_1f7a5_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_1f7a5_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_1f7a5_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_1f7a5_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_1f7a5_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_1f7a5_row1_col0" class="data row1 col0" >3.015</td>
+      <td id="T_1f7a5_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS DISPENSADOR</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_89d48_row0_col0, #T_89d48_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_89d48_row0_col1 {
+  background-color: #FF6347;
+}
+#T_89d48_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_89d48" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_89d48_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_89d48_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_89d48_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_89d48_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_89d48_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_89d48_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_89d48_row1_col0" class="data row1 col0" >4.012</td>
+      <td id="T_89d48_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS BEBEDEROS</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_b27cd_row0_col0, #T_b27cd_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_b27cd_row0_col1 {
+  background-color: #FF6347;
+}
+#T_b27cd_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_b27cd" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_b27cd_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_b27cd_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_b27cd_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_b27cd_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_b27cd_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_b27cd_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_b27cd_row1_col0" class="data row1 col0" >1.445</td>
+      <td id="T_b27cd_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>PETS BOLSAS</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_04e4d_row0_col0, #T_04e4d_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_04e4d_row0_col1 {
+  background-color: #FF6347;
+}
+#T_04e4d_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_04e4d" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_04e4d_level0_col0" class="col_heading level0 col0" >0</th>
+      <th id="T_04e4d_level0_col1" class="col_heading level0 col1" >20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_04e4d_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_04e4d_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_04e4d_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_04e4d_level0_row1" class="row_heading level0 row1" >20</th>
+      <td id="T_04e4d_row1_col0" class="data row1 col0" >2.201</td>
+      <td id="T_04e4d_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br><div class='matrix-title'><h2>KIDS ACCESORIO VIAJE</h2></div><div class='matrix-row'><div class='matrix-container'><style type="text/css">
+#T_bd85f_row0_col0, #T_bd85f_row1_col1 {
+  background-color: #87CEEB;
+}
+#T_bd85f_row0_col1 {
+  background-color: #FF6347;
+}
+#T_bd85f_row1_col0 {
+  background-color: #00FF00;
+}
+</style>
+<table id="T_bd85f" style="width:100%;">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_bd85f_level0_col0" class="col_heading level0 col0" >20</th>
+      <th id="T_bd85f_level0_col1" class="col_heading level0 col1" >40</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_bd85f_level0_row0" class="row_heading level0 row0" >20</th>
+      <td id="T_bd85f_row0_col0" class="data row0 col0" >1.000</td>
+      <td id="T_bd85f_row0_col1" class="data row0 col1" >0.000</td>
+    </tr>
+    <tr>
+      <th id="T_bd85f_level0_row1" class="row_heading level0 row1" >40</th>
+      <td id="T_bd85f_row1_col0" class="data row1 col0" >1.602</td>
+      <td id="T_bd85f_row1_col1" class="data row1 col1" >1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><br><br>
